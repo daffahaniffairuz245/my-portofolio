@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 
 export default function Portfolio() {
   const [darkMode, setDarkMode] = useState(false);
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const form = useRef();
 
   // Scroll-to-top logic
   useEffect(() => {
@@ -19,10 +21,7 @@ export default function Portfolio() {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Warna teks untuk Light & Dark Mode
@@ -30,9 +29,29 @@ export default function Portfolio() {
   const textDark = "text-gray-300";
   const bgLight = "bg-gray-50";
   const bgDark = "bg-gray-900";
-
   const cardBgLight = "bg-white";
   const cardBgDark = "bg-gray-800";
+
+  // Fungsi kirim email
+  const sendEmail = (e) => {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        "service_jsag9ij", // ganti dengan Service ID dari EmailJS
+        "template_jsukvtq", // ganti dengan Template ID
+        form.current,
+        "9p7F_w5YZSln7TPR_" // Public Key Anda
+      )
+      .then(
+        () => {
+          alert("Message sent successfully!");
+          form.current.reset();
+        },
+        (error) => {
+          alert("Oops! Something went wrong: " + error.text);
+        }
+      );
+  };
 
   return (
     <div
@@ -54,7 +73,7 @@ export default function Portfolio() {
               darkMode ? "text-gray-100 font-bold" : "text-gray-800 font-bold"
             }
           >
-            Daffa
+            Daffa Hanif Fairuz
           </h1>
           <div className="space-x-6 flex items-center">
             {["About", "Projects", "Skills", "Contact"].map((item) => (
@@ -90,7 +109,7 @@ export default function Portfolio() {
         className={
           darkMode
             ? "h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-gray-100"
-            : "h-screen flex items-center justify-center bg-gray-200 dark grey"
+            : "h-screen flex items-center justify-center bg-gray-200"
         }
       >
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-12">
@@ -111,9 +130,8 @@ export default function Portfolio() {
               <span className="font-semibold text-yellow-500">
                 Mobile & Web Developer
               </span>{" "}
-              yang penuh semangat dengan keahlian di Flutter, Next.js, dan
-              Express. Saya suka membangun aplikasi yang bersih, skalabel, dan
-              ramah pengguna.
+              dengan keahlian di Flutter, Next.js, dan Express. Suka membangun
+              aplikasi yang bersih, skalabel, dan ramah pengguna.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center md:justify-start">
               <a
@@ -283,42 +301,97 @@ export default function Portfolio() {
             darkMode ? "text-gray-100" : "text-gray-800"
           }`}
         >
-          Contact
+          Contact Me
         </h2>
+
         <div
           className={`${
             darkMode ? cardBgDark : cardBgLight
-          } max-w-md mx-auto p-8 rounded-lg shadow-md`}
+          } max-w-lg mx-auto p-8 rounded-2xl shadow-lg`}
         >
-          <form className="space-y-4">
-            <input
-              type="text"
-              placeholder="Your Name"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? "dark:bg-gray-900 dark:text-gray-100" : ""
-              }`}
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? "dark:bg-gray-900 dark:text-gray-100" : ""
-              }`}
-            />
-            <textarea
-              placeholder="Message"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                darkMode ? "dark:bg-gray-900 dark:text-gray-100" : ""
-              }`}
-            ></textarea>
+          <form ref={form} onSubmit={sendEmail} className="space-y-5">
+            {/* Name */}
+            <div>
+              <label
+                htmlFor="from_name"
+                className={`block mb-1 font-medium ${
+                  darkMode ? "text-gray-200" : "text-gray-700"
+                }`}
+              >
+                Your Name
+              </label>
+              <input
+                type="text"
+                name="from_name"
+                id="from_name"
+                placeholder="Enter your name"
+                required
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
+                  darkMode
+                    ? "bg-gray-900 text-gray-100 border-gray-700"
+                    : "border-gray-300"
+                }`}
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label
+                htmlFor="from_email"
+                className={`block mb-1 font-medium ${
+                  darkMode ? "text-gray-200" : "text-gray-700"
+                }`}
+              >
+                Your Email
+              </label>
+              <input
+                type="email"
+                name="from_email"
+                id="from_email"
+                placeholder="Enter your email"
+                required
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
+                  darkMode
+                    ? "bg-gray-900 text-gray-100 border-gray-700"
+                    : "border-gray-300"
+                }`}
+              />
+            </div>
+
+            {/* Message */}
+            <div>
+              <label
+                htmlFor="message"
+                className={`block mb-1 font-medium ${
+                  darkMode ? "text-gray-200" : "text-gray-700"
+                }`}
+              >
+                Message
+              </label>
+              <textarea
+                name="message"
+                id="message"
+                rows="5"
+                placeholder="Write your message..."
+                required
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
+                  darkMode
+                    ? "bg-gray-900 text-gray-100 border-gray-700"
+                    : "border-gray-300"
+                }`}
+              ></textarea>
+            </div>
+
+            {/* Button */}
             <button
-              className={`w-full py-2 rounded-lg text-white ${
+              type="submit"
+              className={`w-full py-3 rounded-lg text-lg font-semibold shadow-md transition ${
                 darkMode
-                  ? "bg-blue-800 hover:bg-blue-900"
-                  : "bg-blue-600 hover:bg-blue-700"
+                  ? "bg-blue-700 hover:bg-blue-800 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
             >
-              Send
+              📩 Send Message
             </button>
           </form>
         </div>
@@ -339,7 +412,7 @@ export default function Portfolio() {
       {showTopBtn && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6   p-3 rounded-full shadow-lg  transition"
+          className="fixed bottom-6 right-6 p-3 rounded-full shadow-lg bg-yellow-400 hover:bg-yellow-300 transition"
         >
           ⬆️
         </button>
