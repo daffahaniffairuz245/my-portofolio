@@ -205,14 +205,17 @@ export default function Portfolio() {
               {
                 title: "PPDB App",
                 desc: "Aplikasi PPDB dengan fitur pembayaran & pengumuman.",
+                image: "/assets/img/ppdb.png",// path ke gambar
               },
               {
-                title: "Hadist Arbain",
+                title: "british propolis",
                 desc: "Aplikasi CRUD dengan Firebase Authentication.",
+                image: "/assets/img/ppq.png",// path ke gambar
               },
               {
                 title: "Personal Portfolio",
                 desc: "Website portofolio untuk menampilkan karya saya.",
+                  image: "/assets/img/cv.png",// path ke gambar
               },
             ].map((project) => (
               <div
@@ -221,6 +224,16 @@ export default function Portfolio() {
                   darkMode ? cardBgDark : cardBgLight
                 } shadow-md rounded-lg p-6`}
               >
+                {/* Image */}
+                {project.image && (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                )}
+
+                {/* Title */}
                 <h3
                   className={`font-bold text-xl mb-2 ${
                     darkMode ? "text-gray-100" : "text-gray-800"
@@ -228,6 +241,8 @@ export default function Portfolio() {
                 >
                   {project.title}
                 </h3>
+
+                {/* Description */}
                 <p className={darkMode ? "text-gray-300" : "text-gray-600"}>
                   {project.desc}
                 </p>
